@@ -1,0 +1,27 @@
+
+<blue>
+    __                 __
+   / /  ___ ________ _/ /  ___  ___ _
+  / /__/ _ `/ __/ _ `/ /__/ _ \/ _ `/
+ /____/\_,_/_/  \_,_/____/\___/\_, /
+                              /___/  </blue>
+  <red>V#{{VERSION}}</red>
+
+  Send Laravel logs to ElasticSearch.
+
+  USAGE EXAMPLES:
+  #{{__EXECUTABLE__}} [elastic_host:port] < log_file
+  tail -f log_file | #{{__EXECUTABLE__}} [elastic_host:port]
+  #{{__EXECUTABLE__}} [elastic_host:port] --input=laravel.log
+
+  OPTIONS
+    <yellow>--input=[laravel.log]</yellow>  Log file (Default: STDIN)
+    <yellow>--index=[index_name] </yellow>  Index Name
+    <yellow>--ignore=[levels]    </yellow>  Ignore levels (Separated by comma)
+    <yellow>--batch_size=[size]  </yellow>  Batch size (Default: 100)
+    <yellow>--async              </yellow>  Async mode (Use future mode)
+    <yellow>--no-check-cert      </yellow>  Ignore SSL certificate check
+    <yellow>--retries=[number]   </yellow>  Send retries on fail (Default: 2)
+    <yellow>--read-freq=[ms]     </yellow>  Read frequency (Default: 500 ms)
+    <yellow>--timezone=[zone]    </yellow>  Timezone (Default: system timezone)
+    <yellow>-v                   </yellow>  Verbose mode

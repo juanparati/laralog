@@ -1,0 +1,27 @@
+{
+  "name": "mamuph/base",
+  "description": "PHP-CLI framework",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "BSD",
+  "authors": [
+    {
+      "name": "Juan Lago",
+      "email": "mamuph@protonmail.com"
+    }
+  ],
+  "config": {
+    "vendor-dir": "src/Vendor"
+  },
+  "scripts": {
+    "post-create-project-cmd": [
+      "@composer create-project mamuph/system src/System \"2.0\""
+    ]
+  },
+  "require": {
+    "league/climate": "3.2.1",
+    "elasticsearch/elasticsearch": "v6.0.1",
+    "nesbot/carbon": "1.22.1",
+    "phpunit/phpunit": "^6.5"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "mamuph/system",
+  "description": "PHP-CLI framework core system",
+  "minimum-stability": "stable",
+  "license": "BSD",
+  "authors": [
+    {
+      "name": "Juan Lago",
+      "email": "mamuph@protonmail.com"
+    }
+  ]
+}

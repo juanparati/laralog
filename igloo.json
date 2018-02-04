@@ -1,0 +1,21 @@
+{
+    "name": "Laralog",
+    "paths": {
+        "build": "build\/",
+        "src": "src\/",
+        "test": "test\/"
+    },
+    "build": {
+        "name": "laralog_#{{VERSION.MAJOR}}.#{{VERSION.MINOR}}.phar"
+    },
+    "dependencies": {
+        "extensions": [
+            "mbstring",
+            "ctype",
+            "pcntl",
+            "pcre"
+        ],
+        "functions": [],
+        "memory": "24MB"
+    }
+}

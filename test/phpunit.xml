@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="index.php" colors="true">
+    <testsuites>
+        <testsuite name="Mamuph Test Suites">
+            <directory suffix=".php">Tests/System/</directory>
+            <directory suffix=".php">Tests/Models/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../src/</directory>
+        </whitelist>
+    </filter>
+</phpunit>
