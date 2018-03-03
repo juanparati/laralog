@@ -1,5 +1,8 @@
-Laralog
-=======
+            __                 __
+           / /  ___ ________ _/ /  ___  ___ _
+          / /__/ _ `/ __/ _ `/ /__/ _ \/ _ `/
+         /____/\_,_/_/  \_,_/____/\___/\_, /
+                                      /___/ 
 
 ## 1. What is it?
 
@@ -66,5 +69,9 @@ Laralog is available as a self-executable PHAR file, however if you want to buil
 
         caveman build . -x -r
 
+
+## 6. Download
+
+[Download last release](https://github.com/juanparati/laralog/releases/latest)
 
 
