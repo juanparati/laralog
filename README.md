@@ -40,7 +40,7 @@ Laralog is decoupled from Laravel, so it can read and send the Laravel logs even
 
 - Read logs sequentially without stop and output the new entries to STDOUT:
 
-        laralog https://myinstance.lan:9200 -v
+        laralog https://myinstance.lan:9200 --input=laravel.log -v
         
 
 ## 4. Parameters
