@@ -5,7 +5,7 @@
  *
  * Stream reader
  */
-class Model_StreamReader
+class Model_StreamReader implements Model_Contracts_Reader
 {
 
 

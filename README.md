@@ -21,13 +21,13 @@ Laralog is decoupled from Laravel, so it can read and send the Laravel logs even
 - Decoupled solution based on [Mamuph framework](http://www.mamuph.org)
 
 
-## 3. How it works?
+## 3. Usage examples
 
 - Read logs sequentially without stop and send logs to a single ES instance using a custom index:
 
         laralog https://myesinstance.lan:9200 --input=laravel.log --index=myindex
         
-- Read logs from a external file and logs to a group of server defined in a file (One instance per line):
+- Read logs from a external file and logs to a group of servers defined in a file (One instance per line):
 
         laralog my_es_servers.txt < laravel.log
 

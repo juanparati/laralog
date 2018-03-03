@@ -98,7 +98,11 @@ class Controller_Main extends Controller
         $hostname      = gethostname();
         $input         = Params::get('input');
 
-        $reader = new Model_StreamReader($input);
+
+        if ($input === 'php://stdin')
+            $reader = new Model_STDINReader();
+        else
+            $reader = new Model_StreamReader($input);
 
 
         // Read, parse and send
