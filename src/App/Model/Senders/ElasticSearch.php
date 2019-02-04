@@ -75,7 +75,7 @@ class Model_Senders_ElasticSearch implements Model_Contracts_Sender
 	 */
 	public function getDatetimeFormat(): string
 	{
-		return 'ISO8601';
+		return 'Y-m-d\TH:i:sP';
 	}
 
 

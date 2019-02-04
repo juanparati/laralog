@@ -215,12 +215,6 @@ class Controller_Main extends Controller
 	}
 
 
-    public function sendLog()
-	{
-
-	}
-
-
     /**
      * Display the help
      */

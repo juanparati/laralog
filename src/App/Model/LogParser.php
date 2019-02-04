@@ -60,19 +60,18 @@ class Model_LogParser
 
             switch ($dateformat)
 			{
-				case 'ISO8601':
-					$timestamp = $timestamp->toIso8601String();
-					break;
-
 				case 'epoch':
 					$timestamp = $timestamp->timestamp * 1000;
 					break;
 
-				default:
+				case 'timestamp':
 					$timestamp = $timestamp->timestamp;
 					break;
-			}
 
+				default:
+					$timestamp = $timestamp->format($dateformat);
+					break;
+			}
 
             $log =
 			[
