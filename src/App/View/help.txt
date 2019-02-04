@@ -7,7 +7,7 @@
                               /___/  </blue>
   <red>V#{{VERSION}}</red>
 
-  Send Laravel logs to ElasticSearch.
+  Send Laravel logs to ElasticSearch or Datadog.
 
   USAGE EXAMPLES:
   #{{__EXECUTABLE__}} [elastic_host:port] < log_file
@@ -18,10 +18,12 @@
     <yellow>--input=[laravel.log]</yellow>  Log file (Default: STDIN)
     <yellow>--index=[index_name] </yellow>  Index Name
     <yellow>--ignore=[levels]    </yellow>  Ignore levels (Separated by comma)
-    <yellow>--batch_size=[size]  </yellow>  Batch size (Default: 100)
+    <yellow>--batch_size=[size]  </yellow>  Batch size (Default: 20)
     <yellow>--async              </yellow>  Async mode (Use future mode)
     <yellow>--no-check-cert      </yellow>  Ignore SSL certificate check
     <yellow>--retries=[number]   </yellow>  Send retries on fail (Default: 2)
     <yellow>--read-freq=[ms]     </yellow>  Read frequency (Default: 500 ms)
     <yellow>--timezone=[zone]    </yellow>  Timezone (Default: system timezone)
+    <yellow>--sender=[sender]    </yellow>  Sender (elastic_search, datadog)
+    <yellow>--hostname=[hostname]</yellow>  Override hostname
     <yellow>-v                   </yellow>  Verbose mode

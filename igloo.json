@@ -13,9 +13,10 @@
             "mbstring",
             "ctype",
             "pcntl",
-            "pcre"
+            "pcre",
+            "json"
         ],
         "functions": [],
-        "memory": "24MB"
+        "memory": "16MB"
     }
 }

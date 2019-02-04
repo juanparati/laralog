@@ -2,7 +2,7 @@
   "name": "mamuph/system",
   "description": "PHP-CLI framework core system",
   "minimum-stability": "stable",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "authors": [
     {
       "name": "Juan Lago",

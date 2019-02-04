@@ -1,5 +1,5 @@
 <?php
-// It is required for unix signaling
+// It is required for IPC signaling
 if (function_exists('pcntl_async_signals')) {
     pcntl_async_signals(true);
 } else {
@@ -15,7 +15,7 @@ if (function_exists('pcntl_async_signals')) {
  * @package     Mamuph Hooks
  * @category    Hook
  * @author      Mamuph Team
- * @copyright   (c) 2015-2017 Mamuph Team
+ * @copyright   (c) 2015-2018 Mamuph Team
  */
 abstract class Core_Hook
 {
@@ -28,44 +28,47 @@ abstract class Core_Hook
 
 
     /**
+     * Hooks for unix signals and mamuph core events
+     *
+     * @see http://man7.org/linux/man-pages/man7/signal.7.html
      * @var array   Hook list
      */
     protected $hooks = [
-        'UNIX_SIGHUP'          => [],
-        'UNIX_SIGINT'          => [],
-        'UNIX_SIGQUIT'         => [],
-        'UNIX_SIGILL'          => [],
-        'UNIX_SIGTRAP'         => [],
-        'UNIX_SIGABRT'         => [],
-        //'UNIX_SIGIOT'          => [],
-        'UNIX_SIGBUS'          => [],
-        'UNIX_SIGFPE'          => [],
-        //'UNIX_SIGKILL'         => [],
-        'UNIX_SIGUSR1'         => [],
-        'UNIX_SIGSEGV'         => [],
-        'UNIX_SIGUSR2'         => [],
-        'UNIX_SIGPIPE'         => [],
-        'UNIX_SIGALRM'         => [],
-        'UNIX_SIGTERM'         => [],
-        'UNIX_SIGSTKFLT'       => [],
-        'UNIX_SIGCLD'          => [],
-        'UNIX_SIGCHLD'         => [],
-        'UNIX_SIGCONT'         => [],
-        //'UNIX_SIGSTOP'         => [],
-        'UNIX_SIGTSTP'         => [],
-        'UNIX_SIGTTIN'         => [],
-        'UNIX_SIGTTOU'         => [],
-        'UNIX_SIGURG'          => [],
-        'UNIX_SIGXCPU'         => [],
-        'UNIX_SIGXFSZ'         => [],
-        'UNIX_SIGVTALRM'       => [],
-        'UNIX_SIGPROF'         => [],
-        'UNIX_SIGWINCH'        => [],
-        'UNIX_SIGPOLL'         => [],
-        'UNIX_SIGIO'           => [],
-        'UNIX_SIGPWR'          => [],
-        'UNIX_SIGSYS'          => [],
-        'UNIX_SIGBABY'         => [],
+        'IPC_SIGHUP'          => [],
+        'IPC_SIGINT'          => [],
+        'IPC_SIGQUIT'         => [],
+        'IPC_SIGILL'          => [],
+        'IPC_SIGTRAP'         => [],
+        'IPC_SIGABRT'         => [],
+        //'IPC_SIGIOT'          => [],
+        'IPC_SIGBUS'          => [],
+        'IPC_SIGFPE'          => [],
+        //'IPC_SIGKILL'         => [],
+        'IPC_SIGUSR1'         => [],
+        'IPC_SIGSEGV'         => [],
+        'IPC_SIGUSR2'         => [],
+        'IPC_SIGPIPE'         => [],
+        'IPC_SIGALRM'         => [],
+        'IPC_SIGTERM'         => [],
+        'IPC_SIGSTKFLT'       => [],
+        'IPC_SIGCLD'          => [],
+        'IPC_SIGCHLD'         => [],
+        'IPC_SIGCONT'         => [],
+        //'IPC_SIGSTOP'         => [],
+        'IPC_SIGTSTP'         => [],
+        'IPC_SIGTTIN'         => [],
+        'IPC_SIGTTOU'         => [],
+        'IPC_SIGURG'          => [],
+        'IPC_SIGXCPU'         => [],
+        'IPC_SIGXFSZ'         => [],
+        'IPC_SIGVTALRM'       => [],
+        'IPC_SIGPROF'         => [],
+        'IPC_SIGWINCH'        => [],
+        'IPC_SIGPOLL'         => [],
+        'IPC_SIGIO'           => [],
+        'IPC_SIGPWR'          => [],
+        'IPC_SIGSYS'          => [],
+        'IPC_SIGBABY'         => [],
 
         'MAMUPH_INITIALIZED'   => [],
         'MAMUPH_TERMINATED'    => []
@@ -88,9 +91,9 @@ abstract class Core_Hook
             foreach (array_keys($this->hooks) as $hookname)
             {
 
-                if (strpos($hookname, 'UNIX_') !== false)
+                if (strpos($hookname, 'IPC_') !== false)
                 {
-                    $signal = str_replace('UNIX_', '', $hookname);
+                    $signal = str_replace('IPC_', '', $hookname);
 
                     if (defined($signal))
                         pcntl_signal(constant($signal), [$this, '_notifySignal']);
@@ -140,9 +143,9 @@ abstract class Core_Hook
         foreach (array_keys($this->hooks) as $hookname)
         {
 
-            if (strpos($hookname, 'UNIX_') !== false)
+            if (strpos($hookname, 'IPC_') !== false)
             {
-                $signal_cons = str_replace('UNIX_', '', $hookname);
+                $signal_cons = str_replace('IPC_', '', $hookname);
 
                 if (defined($signal_cons) && constant($signal_cons) === $signal)
                 {
