@@ -52,6 +52,12 @@ return array(
         'optional'      => true,
         'value'         => false
     ],
+    'current_timezone'  =>
+	[
+		'long_arg' 		=> 'current-timezone',
+		'description' 	=> 'Set current time zone',
+		'optional' 		=> true
+	],
     'timezone'          =>
     [
         'long_arg'      => 'timezone',

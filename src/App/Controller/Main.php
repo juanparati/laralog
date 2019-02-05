@@ -80,24 +80,6 @@ class Controller_Main extends Controller
         }
 
 
-        $timezone = Params::get('timezone');
-
-        // Set timezone
-        // ------------
-        if ($timezone && $timezone !== true)
-            date_default_timezone_set($timezone);
-        else
-            $timezone = date_default_timezone_get();
-
-        $timezone = new DateTimeZone($timezone);
-
-
-        // Install signal handlers
-        // -----------------------
-        Hook::instance()->attach('UNIX_SIGINT' , [$this, 'terminate']);
-        Hook::instance()->attach('UNIX_SIGTERM', [$this, 'terminate']);
-
-
         // Read host from file
         // -------------------
         $hosts = Params::get('host');
@@ -140,16 +122,36 @@ class Controller_Main extends Controller
         $this->sender = new $sender($client, Params::get('async'));
 
 
+        // Set current timezone
+		// --------------------
+		$current_timezone = Params::get('current_timezone');
+
+		if ($current_timezone && $current_timezone !== true)
+			date_default_timezone_set($current_timezone);
+		else
+			$current_timezone = date_default_timezone_get();
+
+		$current_timezone = new DateTimeZone($current_timezone);
+
+
+		// Set target timezone
+		// -------------------
+        $to_timezone = Params::get('timezone');
+        $to_timezone = $this->sender->forceUTCTimezone() ? 'UTC' : $to_timezone;
+        $to_timezone = $to_timezone ? new DateTimeZone($to_timezone) : null;
+
+
 		// Set some extra log info
 		// -----------------------
         $this->log_info =
 		[
-			'ignore_levels' => Params::get('ignore') ?? explode(',', Params::get('ignore')),
-			'verbose' 		=> Params::get('verbose'),
-			'index' 		=> Params::get('index'),
-			'hostname' 		=> Params::get('hostname'),
-			'timezone' 		=> $timezone,
-			'dateformat' 	=> $this->sender->getDatetimeFormat(),
+			'ignore_levels'    => Params::get('ignore') ?? explode(',', Params::get('ignore')),
+			'verbose' 		   => Params::get('verbose'),
+			'index' 		   => Params::get('index'),
+			'hostname' 		   => Params::get('hostname'),
+			'current_timezone' => $current_timezone,
+			'to_timezone'      => $to_timezone,
+			'dateformat' 	   => $this->sender->getDatetimeFormat(),
 		];
 
 
@@ -184,8 +186,15 @@ class Controller_Main extends Controller
 		foreach ($this->reader->getLines() as $entry)
 		{
 
+			$entry = Model_LogParser::parseLogEntry(
+				$entry,
+				$this->log_info['current_timezone'],
+				$this->log_info['to_timezone'],
+				$this->log_info['dateformat']
+			);
+
 			// Parse entry
-			if (!$entry = Model_LogParser::parseLogEntry($entry, $this->log_info['timezone'], $this->log_info['dateformat']))
+			if (!$entry)
 				continue;
 
 			// Ignore levels
@@ -260,14 +269,5 @@ class Controller_Main extends Controller
 		}
 	}
 
-
-	/**
-     * Finish program
-     */
-    public function terminate()
-    {
-        $this->console->out('Leaving...');
-        Apprunner::terminate(Apprunner::EXIT_SUCCESS);
-    }
 
 }

@@ -39,8 +39,12 @@ class Model_LogParser
      * @param DateTimeZone $timezone
      * @return array|false
      */
-    public static function parseLogEntry(string $entry, DateTimeZone $timezone = null, string $dateformat = 'ISO8601')
-    {
+    public static function parseLogEntry(
+    	string $entry,
+		DateTimeZone $current_timezone = null,
+		DateTimeZone $to_timezone = null,
+		string $dateformat = 'ISO8601'
+	) {
 
     	if (empty($entry))
     		return false;
@@ -56,16 +60,19 @@ class Model_LogParser
             else
                 $data = null;
 
-            $timestamp = Carbon::createFromFormat(static::DATETIME_FORMAT, $matches[1], $timezone);
+            $timestamp = Carbon::createFromFormat(static::DATETIME_FORMAT, $matches[1], $current_timezone);
+
+            if ($to_timezone)
+            	$timestamp->setTimezone($to_timezone);
 
             switch ($dateformat)
 			{
 				case 'epoch':
-					$timestamp = $timestamp->timestamp * 1000;
+					$timestamp = time() * 1000;
 					break;
 
 				case 'timestamp':
-					$timestamp = $timestamp->timestamp;
+					$timestamp = $timestamp->getTimestamp();
 					break;
 
 				default:

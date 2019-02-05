@@ -73,12 +73,21 @@ class Model_Senders_ElasticSearch implements Model_Contracts_Sender
 	 *
 	 * @return string
 	 */
-	public function getDatetimeFormat(): string
+	public function getDatetimeFormat() : string
 	{
 		return 'Y-m-d\TH:i:sP';
 	}
 
 
+	/**
+	 * Force UTC as timezone?
+	 *
+	 * @return bool
+	 */
+	public function forceUTCTimezone(): bool
+	{
+		return false;
+	}
 
 
 }

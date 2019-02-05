@@ -32,4 +32,12 @@ interface Model_Contracts_Sender
 	 * @return string
 	 */
 	public function getDatetimeFormat() : string;
+
+
+	/**
+	 * Force UTC as timezone.
+	 *
+	 * @return mixed
+	 */
+	public function forceUTCTimezone() : bool;
 }
