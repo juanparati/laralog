@@ -1,13 +1,13 @@
 {
-  "name": "mamuph/base",
-  "description": "PHP-CLI framework",
+  "name": "juanparati/laralog",
+  "description": "The Laravel log sender for ElasticSearch and Datadog",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "license": "BSD",
   "authors": [
     {
       "name": "Juan Lago",
-      "email": "mamuph@protonmail.com"
+      "email": "juanparati@gmail.com"
     }
   ],
   "config": {
