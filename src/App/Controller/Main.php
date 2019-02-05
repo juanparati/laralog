@@ -1,6 +1,6 @@
 <?php
 
-use Elasticsearch\ClientBuilder;
+use Amp\Loop;
 
 
 /**
@@ -9,18 +9,42 @@ use Elasticsearch\ClientBuilder;
 class Controller_Main extends Controller
 {
 
+	/**
+	 * Maximum line height.
+	 */
+	const MAX_LINE_HEIGHT = 32768;
+
+
     /**
-     * Climate instance
+     * Climate instance.
      *
      * @var \League\CLImate\CLImate
      */
     protected $console;
 
 
-    /**
-     * @var \Elasticsearch\Client
-     */
-    protected $elastic_client;
+	/**
+	 * Sender instance.
+	 *
+	 * @var Model_Contracts_Sender.
+	 */
+    protected $sender;
+
+
+	/**
+	 * Reader.
+	 *
+	 * @var Model_Contracts_Reader
+	 */
+    protected $reader;
+
+
+	/**
+	 * Log info.
+	 *
+	 * @var array
+	 */
+	protected $log_info = [];
 
 
     /**
@@ -38,6 +62,12 @@ class Controller_Main extends Controller
     public function actionMain()
     {
 
+		// Attach your IPC signals event handling
+		// --------------------------------------
+		Hook::instance()->attach('IPC_SIGHUP', [$this, 'actionTerminateBySignal']);
+		Hook::instance()->attach('IPC_SIGINT', [$this, 'actionTerminateBySignal']);
+
+
         // Validate arguments
         // ------------------
         $argsval = Params::validate();
@@ -50,24 +80,6 @@ class Controller_Main extends Controller
         }
 
 
-        $timezone = Params::get('timezone');
-
-        // Set timezone
-        // ------------
-        if ($timezone && $timezone !== true)
-            date_default_timezone_set($timezone);
-        else
-            $timezone = date_default_timezone_get();
-
-        $timezone = new DateTimeZone($timezone);
-
-
-        // Install signal handlers
-        // -----------------------
-        Hook::instance()->attach('UNIX_SIGINT' , [$this, 'terminate']);
-        Hook::instance()->attach('UNIX_SIGTERM', [$this, 'terminate']);
-
-
         // Read host from file
         // -------------------
         $hosts = Params::get('host');
@@ -78,77 +90,138 @@ class Controller_Main extends Controller
             $hosts = [$hosts];
 
 
-        // Setup ElasticSearch connection
-        // ------------------------------
-        $this->elastic_client = ClientBuilder::create()
-            ->setHosts($hosts)
-            ->setRetries(Params::get('retries'))
-            ->setSSLVerification(!Params::get('no-check-cert'))
-            ->setHandler(ClientBuilder::defaultHandler(['max_handles' => Params::get('batch_size')]))
-            ->build();
+        // Setup client
+        // ------------
+		$sender = str_replace('_', '', ucwords(Params::get('sender'), '_'));
+		$client = 'Model_Clients_' . $sender;
+
+		if (!class_exists($client))
+		{
+			$this->console->error('Sender not available');
+			Apprunner::terminate(Apprunner::EXIT_FAILURE);
+		}
+
+		/**
+		 * @var $client Model_Contracts_Client
+		 */
+		$client = new $client(
+			$hosts,
+			(int) Params::get('retries'),
+			!Params::get('no-check-cert'),
+			(int) Params::get('batch_size')
+		);
 
 
         // Instatiate sender
         // -----------------
-        $sender = new Model_LogSender($this->elastic_client);
+		$sender = 'Model_Senders_' . $sender;
 
-        $ignore_levels = Params::get('ignore') ?? explode(',', Params::get('ignore'));
-        $verbose       = Params::get('verbose');
-        $index         = Params::get('index');
-        $hostname      = gethostname();
-        $input         = Params::get('input');
-
-
-        if ($input === 'php://stdin')
-            $reader = new Model_STDINReader();
-        else
-            $reader = new Model_StreamReader($input);
+		/**
+		 * @var $sender Model_Contracts_Sender
+		 */
+        $this->sender = new $sender($client, Params::get('async'));
 
 
-        // Read, parse and send
-        // --------------------
-        while (1)
-        {
+        // Set current timezone
+		// --------------------
+		$current_timezone = Params::get('current_timezone');
 
-            usleep(Params::get('read_freq') * 1000);
+		if ($current_timezone && $current_timezone !== true)
+			date_default_timezone_set($current_timezone);
+		else
+			$current_timezone = date_default_timezone_get();
 
-            foreach ($reader->getLines() as $entry)
-            {
+		$current_timezone = new DateTimeZone($current_timezone);
 
-                // Parse entry
-                if (!$entry = Model_LogParser::parseLogEntry($entry, $timezone))
-                    continue;
 
-                // Ignore levels
-                if (!empty($ignore_levels) && in_array($entry['level'], $ignore_levels))
-                    continue;
+		// Set target timezone
+		// -------------------
+        $to_timezone = Params::get('timezone');
+        $to_timezone = $this->sender->forceUTCTimezone() ? 'UTC' : $to_timezone;
+        $to_timezone = $to_timezone ? new DateTimeZone($to_timezone) : null;
 
-                // Add hostname
-                $entry['hostname'] = $hostname;
 
-                // Display entries when verbose mode is used
-                if ($verbose)
-                    print_r($entry);
+		// Set some extra log info
+		// -----------------------
+        $this->log_info =
+		[
+			'ignore_levels'    => Params::get('ignore') ?? explode(',', Params::get('ignore')),
+			'verbose' 		   => Params::get('verbose'),
+			'index' 		   => Params::get('index'),
+			'hostname' 		   => Params::get('hostname'),
+			'current_timezone' => $current_timezone,
+			'to_timezone'      => $to_timezone,
+			'dateformat' 	   => $this->sender->getDatetimeFormat(),
+		];
 
-                // Send to ElasticSearch
-                try
-                {
-                    $sender->send($index, $entry);
-                }
-                catch (Exception $e)
-                {
-                    $this->console->error('Unable to send logs ' . $e->getMessage());
-                }
 
-            }
+        // Instantiate reader
+		// ------------------
+        $input = Params::get('input');
 
-        }
+		if ($input === 'php://stdin')
+			$this->reader = new Model_Readers_Stdin();
+		else
+			$this->reader = new Model_Readers_Stream(File::parsePath($input));
 
+
+        // Initialize event loop
+		// ---------------------
+		Loop::run(function ()
+		{
+			// "repeat" is used instead of "onReadable", because unfortunately not all
+			// PHP installations include the libevent extension.
+			Loop::repeat(Params::get('read_freq'), Closure::fromCallable([$this, 'readLog']));
+		});
 
         // Your app finish here
         Apprunner::terminate(Apprunner::EXIT_SUCCESS);
 
     }
+
+
+    protected function readLog()
+	{
+
+		foreach ($this->reader->getLines() as $entry)
+		{
+
+			$entry = Model_LogParser::parseLogEntry(
+				$entry,
+				$this->log_info['current_timezone'],
+				$this->log_info['to_timezone'],
+				$this->log_info['dateformat']
+			);
+
+			// Parse entry
+			if (!$entry)
+				continue;
+
+			// Ignore levels
+			if (!empty($this->log_info['ignore_levels']) && in_array($entry['level'], $this->log_info['ignore_levels']))
+				continue;
+
+			// Add hostname
+			$entry['hostname'] = $this->log_info['hostname'];
+
+			// Display entries when verbose mode is used
+			if ($this->log_info['verbose'])
+				$this->console->json($entry);
+
+			// Send to sender
+			try
+			{
+				$this->sender->send($this->log_info['index'], $entry);
+			}
+			catch (Exception $e)
+			{
+				$this->console->error('Unable to send logs ' . $e->getMessage());
+			}
+
+		}
+
+
+	}
 
 
     /**
@@ -166,13 +239,35 @@ class Controller_Main extends Controller
     }
 
 
-    /**
-     * Finish program
-     */
-    public function terminate()
-    {
-        $this->console->out('Leaving...');
-        Apprunner::terminate(Apprunner::EXIT_SUCCESS);
-    }
+	/**
+	 * Action received when
+	 * @param int $signal
+	 */
+	public function actionTerminateBySignal(int $signal)
+	{
+		if (!ignore_user_abort())
+		{
+			// Close reader
+			@fclose($this->reader);
+
+			$exit_status = Apprunner::EXIT_FAILURE;
+
+			switch ($signal)
+			{
+				// SIGHUP
+				case 1:
+					$exit_status = Apprunner::EXIT_HUP;
+					break;
+				// SIGINT
+				case 2:
+					$exit_status = Apprunner::EXIT_CTRLC;
+			}
+
+			echo "Exiting...";
+
+			Apprunner::terminate($exit_status);
+		}
+	}
+
 
 }

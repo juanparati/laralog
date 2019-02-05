@@ -15,12 +15,15 @@
   },
   "scripts": {
     "post-create-project-cmd": [
-      "@composer create-project mamuph/system src/System \"2.0\""
+      "@composer create-project mamuph/system src/System \"2.2\""
     ]
   },
   "require": {
     "league/climate": "3.2.1",
     "elasticsearch/elasticsearch": "v6.0.1",
-    "nesbot/carbon": "1.22.1"
+    "nesbot/carbon": "1.22.1",
+    "amphp/amp": "^2.1",
+    "amphp/artax": "^3.0",
+    "ext-json": "*"
   }
 }

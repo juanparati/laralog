@@ -43,7 +43,7 @@ return array(
         'long_arg'      => 'batch-size',
         'description'   => 'Batch size',
         'optional'      => true,
-        'value'         => 100
+        'value'         => 30
     ],
     'no_check_cert'     =>
     [
@@ -52,6 +52,12 @@ return array(
         'optional'      => true,
         'value'         => false
     ],
+    'current_timezone'  =>
+	[
+		'long_arg' 		=> 'current-timezone',
+		'description' 	=> 'Set current time zone',
+		'optional' 		=> true
+	],
     'timezone'          =>
     [
         'long_arg'      => 'timezone',
@@ -72,6 +78,20 @@ return array(
         'optional'      => true,
         'value'         => 500
     ],
+    'hostname' 			=>
+	[
+		'long_arg' 		=> 'hostname',
+		'description' 	=> 'Override hostname',
+		'optional' 		=> true,
+		'value' 		=> gethostname()
+	],
+    'sender' 			=>
+	[
+		'long_arg' 		=> 'sender',
+		'description' 	=> 'Sender driver (Default: elastic_search)',
+		'optional' 		=> true,
+		'value' 		=> 'elastic_search'
+	],
     'help'      =>
     [
         'long_arg'      => 'help',
