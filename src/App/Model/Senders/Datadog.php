@@ -62,7 +62,7 @@ class Model_Senders_Datadog implements Model_Contracts_Sender
     public function __construct($client, bool $async = false)
     {
         $this->client = $client->getClient();
-		//$this->client->setOption(Client::OP_DISCARD_BODY, $async);
+		$this->client->setOption(Client::OP_DISCARD_BODY, $async);
 
 		$this->client_settings = $client->getClientSettings();
 

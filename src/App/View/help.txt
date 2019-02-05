@@ -1,4 +1,3 @@
-
 <blue>
     __                 __
    / /  ___ ________ _/ /  ___  ___ _
@@ -18,12 +17,13 @@
     <yellow>--input=[laravel.log]</yellow>  Log file (Default: STDIN)
     <yellow>--index=[index_name] </yellow>  Index Name
     <yellow>--ignore=[levels]    </yellow>  Ignore levels (Separated by comma)
-    <yellow>--batch_size=[size]  </yellow>  Batch size (Default: 20)
+    <yellow>--batch-size=[size]  </yellow>  Batch size (Default: 10)
     <yellow>--async              </yellow>  Async mode (Use future mode)
     <yellow>--no-check-cert      </yellow>  Ignore SSL certificate check
     <yellow>--retries=[number]   </yellow>  Send retries on fail (Default: 2)
     <yellow>--read-freq=[ms]     </yellow>  Read frequency (Default: 500 ms)
-    <yellow>--timezone=[zone]    </yellow>  Timezone (Default: system timezone)
+    <yellow>--from-timezone=[zone]</yellow> Set current time zone
+    <yellow>--to-timezone=[zone] </yellow>  Convert to timezone
     <yellow>--sender=[sender]    </yellow>  Sender (elastic_search, datadog)
     <yellow>--hostname=[hostname]</yellow>  Override hostname
     <yellow>-v                   </yellow>  Verbose mode

@@ -43,7 +43,7 @@ return array(
         'long_arg'      => 'batch-size',
         'description'   => 'Batch size',
         'optional'      => true,
-        'value'         => 30
+        'value'         => 10
     ],
     'no_check_cert'     =>
     [
@@ -54,13 +54,13 @@ return array(
     ],
     'current_timezone'  =>
 	[
-		'long_arg' 		=> 'current-timezone',
+		'long_arg' 		=> 'from-timezone',
 		'description' 	=> 'Set current time zone',
 		'optional' 		=> true
 	],
     'timezone'          =>
     [
-        'long_arg'      => 'timezone',
+        'long_arg'      => 'to-timezone',
         'description'   => 'Set time zone',
         'optional'      => true
     ],
