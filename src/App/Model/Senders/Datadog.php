@@ -14,7 +14,7 @@ class Model_Senders_Datadog implements Model_Contracts_Sender
 {
 
     /**
-     * Elastic Search client.
+     * Datadog client.
      *
      * @var \Amp\Artax\DefaultClient
      */

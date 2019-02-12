@@ -24,6 +24,7 @@
     "nesbot/carbon": "1.22.1",
     "amphp/amp": "^2.1",
     "amphp/artax": "^3.0",
+    "ext-pcntl": "*",
     "ext-json": "*"
   }
 }
