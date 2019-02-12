@@ -136,7 +136,7 @@ if (File::exists(VENDORPATH . 'autoload.php', File::SCOPE_LOCAL)) {
 /**
  * Send initialized notification
  */
-Hook::instance()->notify('MAMUPH_INITIALIZED');
+//Hook::instance()->notify('MAMUPH_INITIALIZED');
 
 
 /**

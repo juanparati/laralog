@@ -62,12 +62,6 @@ class Controller_Main extends Controller
     public function actionMain()
     {
 
-		// Attach your IPC signals event handling
-		// --------------------------------------
-		Hook::instance()->attach('IPC_SIGHUP', [$this, 'actionTerminateBySignal']);
-		Hook::instance()->attach('IPC_SIGINT', [$this, 'actionTerminateBySignal']);
-
-
         // Validate arguments
         // ------------------
         $argsval = Params::validate();
@@ -169,17 +163,24 @@ class Controller_Main extends Controller
 		// ---------------------
 		Loop::run(function ()
 		{
+			Loop::onSignal(SIGINT, [$this, 'actionTerminateBySignal']);
+			Loop::onSignal(SIGHUP, [$this, 'actionTerminateBySignal']);
+
 			// "repeat" is used instead of "onReadable", because unfortunately not all
 			// PHP installations include the libevent extension.
 			Loop::repeat(Params::get('read_freq'), Closure::fromCallable([$this, 'readLog']));
 		});
 
-        // Your app finish here
+
+		// Finish app
         Apprunner::terminate(Apprunner::EXIT_SUCCESS);
 
     }
 
 
+	/**
+	 * Read log and send.
+	 */
     protected function readLog()
 	{
 
@@ -240,32 +241,17 @@ class Controller_Main extends Controller
 
 
 	/**
-	 * Action received when
+	 * Terminate signal.
+	 *
 	 * @param int $signal
 	 */
-	public function actionTerminateBySignal(int $signal)
+	public function actionTerminateBySignal()
 	{
 		if (!ignore_user_abort())
 		{
-			// Close reader
-			@fclose($this->reader);
-
-			$exit_status = Apprunner::EXIT_FAILURE;
-
-			switch ($signal)
-			{
-				// SIGHUP
-				case 1:
-					$exit_status = Apprunner::EXIT_HUP;
-					break;
-				// SIGINT
-				case 2:
-					$exit_status = Apprunner::EXIT_CTRLC;
-			}
-
 			echo "Exiting...";
 
-			Apprunner::terminate($exit_status);
+			Loop::stop();
 		}
 	}
 
