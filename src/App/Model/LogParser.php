@@ -54,7 +54,7 @@ class Model_LogParser
         if (preg_match(static::LOG_EXPR, $entry, $matches))
         {
             // Extract JSON data
-            if (preg_match('/ (\{.*\})$/', $matches[4], $data))
+            if (preg_match('/ ({.*})$/', trim($matches[4]), $data))
             {
                 $matches[4] = str_replace($data[1], '', $matches[4]);
                 $data       = $data[1];
