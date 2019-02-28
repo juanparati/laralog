@@ -1,5 +1,6 @@
 [2016-04-16 17:25:45] local.INFO: Hello logstash
 [2016-04-16 17:26:00] local.INFO: Example data {"foo": "Test", "bar": true}
+[2016-04-16 17:26:15] local.INFO: Example data2åñ {"foo": "Test", "bar": "{{ Moustache }}"}
 [2016-04-16 17:26:30] local.ERROR: Symfony\Component\Debug\Exception\FatalThrowableError: Parse error: syntax error, unexpected '=' in /home/vagrant/Code/Laravel/app/Http/routes.php:16
 Stack trace:
 #0 [internal function]: App\Providers\RouteServiceProvider->App\Providers\{closure}(Object(Illuminate\Routing\Router))
@@ -23,7 +24,7 @@ Stack trace:
 #18 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(127): Illuminate\Foundation\Http\Kernel->bootstrap()
 #19 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
 #20 /home/vagrant/Code/Laravel/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
-#21 {main}  
+#21 {main}
 [2016-04-16 17:26:54] local.ERROR: Symfony\Component\Debug\Exception\FatalThrowableError: Parse error: syntax error, unexpected '=' in /home/vagrant/Code/Laravel/app/Http/routes.php:16
 Stack trace:
 #0 [internal function]: App\Providers\RouteServiceProvider->App\Providers\{closure}(Object(Illuminate\Routing\Router))
@@ -47,8 +48,8 @@ Stack trace:
 #18 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(127): Illuminate\Foundation\Http\Kernel->bootstrap()
 #19 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
 #20 /home/vagrant/Code/Laravel/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
-#21 {main}  
-[2016-04-16 17:27:05] local.INFO: Hello logstash  
+#21 {main}
+[2016-04-16 17:27:05] local.INFO: Hello logstash
 [2016-04-16 17:27:05] local.ERROR: Symfony\Component\Debug\Exception\FatalThrowableError: Fatal error: Class 'MyObject1' not found in /home/vagrant/Code/Laravel/app/Http/routes.php:16
 Stack trace:
 #0 [internal function]: App\Providers\RouteServiceProvider->{closure}()
@@ -100,8 +101,8 @@ Stack trace:
 #46 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
 #47 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
 #48 /home/vagrant/Code/Laravel/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
-#49 {main}  
-[2016-04-16 17:27:45] local.INFO: Hello logstash  
+#49 {main}
+[2016-04-16 17:27:45] local.INFO: Hello logstash
 [2016-04-16 17:27:45] local.ERROR: Symfony\Component\Debug\Exception\FatalThrowableError: Fatal error: Class 'User' not found in /home/vagrant/Code/Laravel/app/Http/routes.php:16
 Stack trace:
 #0 [internal function]: App\Providers\RouteServiceProvider->{closure}()
@@ -153,8 +154,8 @@ Stack trace:
 #46 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
 #47 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
 #48 /home/vagrant/Code/Laravel/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
-#49 {main}  
-[2016-04-16 17:27:58] local.INFO: Hello logstash  
+#49 {main}
+[2016-04-16 17:27:58] local.INFO: Hello logstash
 [2016-04-16 17:27:58] local.ERROR: PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'homestead.users' doesn't exist in /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Database/Connection.php:333
 Stack trace:
 #0 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Database/Connection.php(333): PDO->prepare('select * from `...')
@@ -287,12 +288,12 @@ Stack trace:
 #59 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
 #60 /home/vagrant/Code/Laravel/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
 #61 /home/vagrant/Code/Laravel/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
-#62 {main}  
-[2016-04-16 17:28:15] local.INFO: Hello logstash test again  
-[2016-04-16 17:29:16] local.DEBUG: this is a debug message  
-[2016-04-16 17:29:45] local.NOTICE: this is a notice message  
-[2016-04-16 17:30:07] local.WARNING: this is a warning message  
-[2016-04-16 17:30:29] local.ERROR: this is an error message  
-[2016-04-16 17:30:54] local.CRITICAL: this is a critical message  
-[2016-04-16 17:31:19] local.ALERT: this is an alert message  
-[2016-04-16 17:31:39] local.EMERGENCY: this is an emergency message  
+#62 {main}
+[2016-04-16 17:28:15] local.INFO: Hello logstash test again
+[2016-04-16 17:29:16] local.DEBUG: this is a debug message
+[2016-04-16 17:29:45] local.NOTICE: this is a notice message
+[2016-04-16 17:30:07] local.WARNING: this is a warning message
+[2016-04-16 17:30:29] local.ERROR: this is an error message
+[2016-04-16 17:30:54] local.CRITICAL: this is a critical message
+[2016-04-16 17:31:19] local.ALERT: this is an alert message
+[2016-04-16 17:31:39] local.EMERGENCY: this is an emergency message
