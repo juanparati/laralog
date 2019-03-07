@@ -36,6 +36,14 @@ Apprunner::init();
 
 
 /**
+ * Load PSR-4 Components (Like for example those installed using composer)
+ */
+if (File::exists(VENDORPATH . 'autoload.php', File::SCOPE_LOCAL)) {
+    Apprunner::includes(VENDORPATH . 'autoload.php');
+}
+
+
+/**
  * Instance and set attach log writer
  *
  * Some available writers are:

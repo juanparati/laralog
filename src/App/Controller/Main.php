@@ -209,6 +209,7 @@ class Controller_Main extends Controller
 			if ($this->log_info['verbose'])
 				$this->console->json($entry);
 
+
 			// Send to sender
 			try
 			{

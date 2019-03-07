@@ -36,14 +36,16 @@ class Model_LogParser
      * Parse log entry.
      *
      * @param string $entry
-     * @param DateTimeZone $timezone
+     * @param DateTimeZone|null $current_timezone
+     * @param DateTimeZone|null $to_timezone
+     * @param string $dateformat
      * @return array|false
      */
     public static function parseLogEntry(
     	string $entry,
 		DateTimeZone $current_timezone = null,
 		DateTimeZone $to_timezone = null,
-		string $dateformat = 'ISO8601'
+		string $dateformat = 'DATE_ISO8601'
 	) {
 
     	if (empty($entry))
@@ -52,7 +54,7 @@ class Model_LogParser
         if (preg_match(static::LOG_EXPR, $entry, $matches))
         {
             // Extract JSON data
-            if (preg_match('/(\{.*\})/U', $matches[4], $data))
+            if (preg_match('/ ({.*})$/', trim($matches[4]), $data))
             {
                 $matches[4] = str_replace($data[1], '', $matches[4]);
                 $data       = $data[1];
@@ -76,7 +78,10 @@ class Model_LogParser
 					break;
 
 				default:
-					$timestamp = $timestamp->format($dateformat);
+				    if (strpos($dateformat,'DATE_') === 0)
+                        $dateformat = constant($dateformat);
+
+				    $timestamp = $timestamp->format($dateformat);
 					break;
 			}
 

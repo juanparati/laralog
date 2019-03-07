@@ -71,16 +71,6 @@ class Model_Senders_Datadog implements Model_Contracts_Sender
 
 
 	/**
-	 * Send all logs when the object is destruct
-	 */
-    public function __destruct()
-	{
-		foreach (array_keys($this->batch) as $index)
-			$this->sendNow($index);
-	}
-
-
-	/**
      * Send log entry.
      *
      * @param string $index

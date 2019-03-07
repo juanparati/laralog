@@ -108,7 +108,7 @@ Sender name: "datadog" (--sender=datadog)
 
 ## 7. About the mess with timezones
 
-Normally the applications for use "UTC" as default timezone, however sometimes due operative requirements our apps and mostly their logs are using timestaps formatted for a different timezone.
+Normally applications and servers use "UTC" as default timezone, however sometimes due operative requirements our apps and mostly their logs are using timestaps formatted for a different timezone.
 
 Laralog will use the configured PHP or OS timezone in order to convert log timestamps (only when "--to-timezone" is used).
 
@@ -121,7 +121,7 @@ In order to deal with timestamps, Laralog provides the following optional parame
 
 ## 8. About the safe file handler
 
-Laralog support different ways to read logs, for example you can redirect the STDIN or tail a log file, and it's fine to use this way when for example you want to send old logs that has not been collected before, however for log files that are writing continuously, the best way is to use the "--input=[laravel.log]" parameter so the safe file handler is used.
+Laralog support different ways to read logs, for example you can redirect the STDIN or tail a log file, and it's fine to use this way when for example you want to send old logs that has not been collected before, however for log files that are writing continuously the best way is to use the "--input=[laravel.log]" parameter so the safe file handler is used.
 
 Benefits of the safe file handler:
 - Log files are re-opened when they are re-created due a log rotation, re-linked or truncated.

@@ -152,7 +152,7 @@ class TestsSystemHook extends TestCase
         // Execute test only if PCNTL is loaded
         if (function_exists('pcntl_signal') && function_exists('pcntl_alarm'))
         {
-            Hook::instance()->attach('UNIX_SIGALRM', function() use (&$alarm_status)
+            Hook::instance()->attach('IPC_SIGALRM', function() use (&$alarm_status)
             {
                $alarm_status = true;
             });
