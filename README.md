@@ -150,4 +150,4 @@ If you are lazy and you don't want to build your Laralog version, you are welcom
 
 ## Back by
 
-- [Matchbanker.no](matchbanker.no)
+- [Matchbanker.no](https://matchbanker.no)
