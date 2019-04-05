@@ -148,6 +148,6 @@ If you are lazy and you don't want to build your Laralog version, you are welcom
 [Download last release](https://github.com/juanparati/laralog/releases/latest)
 
 
-## Back by
+## Backers
 
 - [Matchbanker.no](https://matchbanker.no)
