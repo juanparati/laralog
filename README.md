@@ -132,7 +132,7 @@ The safe file handler do not use LibEvent, inotify or another file event notific
 
 ## 9. How to build Laralog
 
-Laralog is available as a self-executable PHAR file, however if you want to build your own custom PHAR you need the follow this steps:
+Laralog is available as a self-executable PHAR file, however if you want to build your own custom PHAR you need to follow the following steps:
 
 
 * [Download Caveman](https://github.com/Mamuph/caveman/releases) (The Mamuph Helper Tool)
