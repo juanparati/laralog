@@ -92,6 +92,13 @@ return array(
 		'optional' 		=> true,
 		'value' 		=> 'elastic_search'
 	],
+    'smart'             =>
+    [
+        'long_arg'      => 'smart',
+        'description'   => 'Serialize JSON context when is possible',
+        'optional'      => true,
+        'value'         => false
+    ],
     'help'      =>
     [
         'long_arg'      => 'help',

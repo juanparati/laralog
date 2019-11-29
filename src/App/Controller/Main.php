@@ -184,6 +184,8 @@ class Controller_Main extends Controller
     protected function readLog()
 	{
 
+	    $smart = Params::get('smart');
+
 		foreach ($this->reader->getLines() as $entry)
 		{
 
@@ -191,7 +193,8 @@ class Controller_Main extends Controller
 				$entry,
 				$this->log_info['current_timezone'],
 				$this->log_info['to_timezone'],
-				$this->log_info['dateformat']
+				$this->log_info['dateformat'],
+                $smart
 			);
 
 			// Parse entry

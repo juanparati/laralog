@@ -26,4 +26,5 @@
     <yellow>--to-timezone=[zone] </yellow>  Convert to timezone
     <yellow>--sender=[sender]    </yellow>  Sender (elastic_search, datadog)
     <yellow>--hostname=[hostname]</yellow>  Override hostname
+    <yellow>--smart              </yellow>  Try to serialize data as JSON when is possible
     <yellow>-v                   </yellow>  Verbose mode

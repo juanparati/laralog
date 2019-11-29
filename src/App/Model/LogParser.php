@@ -39,13 +39,15 @@ class Model_LogParser
      * @param DateTimeZone|null $current_timezone
      * @param DateTimeZone|null $to_timezone
      * @param string $dateformat
+     * @param bool $smart_serialization
      * @return array|false
      */
     public static function parseLogEntry(
     	string $entry,
 		DateTimeZone $current_timezone = null,
 		DateTimeZone $to_timezone = null,
-		string $dateformat = 'DATE_ISO8601'
+		string $dateformat = 'DATE_ISO8601',
+        bool $smart_serialization = false
 	) {
 
     	if (empty($entry))
@@ -85,6 +87,7 @@ class Model_LogParser
 					break;
 			}
 
+
             $log =
 			[
 				'timestamp'     => $timestamp,
@@ -93,6 +96,18 @@ class Model_LogParser
 				'message'       => trim($matches[4]),
 				'data'          => empty($data) ? null : trim($data)
 			];
+
+
+            /**
+             * Deserialize data and add it to params.
+             */
+            if ($smart_serialization)
+            {
+                $params = json_decode($data, true);
+
+                if (JSON_ERROR_NONE === json_last_error())
+                    $log['params'] = $params;
+            }
 
             // Avoid repeated events
 			// // @see: http://thinkofdev.com/equal-identical-and-array-comparison-in-php/
