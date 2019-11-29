@@ -101,7 +101,7 @@ class Model_LogParser
             /**
              * Deserialize data and add it to params.
              */
-            if ($smart_serialization)
+            if (!empty(trim($log['data'])) && $smart_serialization)
             {
                 $params = json_decode($data, true);
 

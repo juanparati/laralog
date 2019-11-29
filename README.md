@@ -76,6 +76,7 @@ Laralog can send logs to different services like ElasticSearch and Datadog.
 |--to-timezone=[zone]|Convert logs to a different timezone See [timezone list](http://php.net/manual/en/timezones.php) (Only ElasticSearch).|
 |--sender=[sender]|Sender to use: elasticsearch (Default) or datadog.|
 |--hostname=[hostname]|Override the default hostname.|
+|--smart|Serialize JSON context when is possible.|
 |-v|Verbose mode that output the new log entries to STDOUT.| 
 
 
@@ -130,7 +131,17 @@ Benefits of the safe file handler:
 The safe file handler do not use LibEvent, inotify or another file event notification mechanism so instead it uses a regular file check (See "--read-freq=[ms]" parameter). This makes the log file check process a bit slow but in this way the LibEvent extension is not required.
 
 
-## 9. How to build Laralog
+## 9. Smart serialization
+
+The option "--smart" will automatically serialize the JSON chunks found in the context and send it as the "parameters" field.
+
+Example:
+
+        [2019-11-24 06:30:56] production.INFO: Job finished {"connection":"database","queue":"default","job":"SendNewsletter"}
+
+The previous log entry contains JSON chunk as context and normally it's send to the Logstash or Datadog as a string, however with the smart serialization option Laralog will try to extract the JSON part and send it as the field "params".
+
+## 10. How to build Laralog
 
 Laralog is available as a self-executable PHAR file, however if you want to build your own custom PHAR you need to follow the following steps:
 
@@ -141,7 +152,7 @@ Laralog is available as a self-executable PHAR file, however if you want to buil
         caveman build . -x -r
 
 
-## 10. Download
+## 11. Download
 
 If you are lazy and you don't want to build your Laralog version, you are welcome to download the following executable (PHAR file):
 
