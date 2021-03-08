@@ -106,7 +106,7 @@ class Controller_Main extends Controller
 		);
 
 
-        // Instatiate sender
+        // Instantiate sender
         // -----------------
 		$sender = 'Model_Senders_' . $sender;
 

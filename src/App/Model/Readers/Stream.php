@@ -84,7 +84,8 @@ class Model_Readers_Stream implements Model_Contracts_Reader
 	public function __destruct()
 	{
 		// Detach watcher
-		@fclose($this->fp);
+        if ($this->fp)
+		    @fclose($this->fp);
 	}
 
 
@@ -105,8 +106,11 @@ class Model_Readers_Stream implements Model_Contracts_Reader
 
 		$this->last_time = $now;
 
+		$stat = null;
+
 		// Check file stats
-		$stat = @fstat($this->fp);
+        if ($this->fp)
+            $stat = @fstat($this->fp);
 
 		// Check if file is still linked/exists
 		if (empty($stat['nlink']))
@@ -142,7 +146,8 @@ class Model_Readers_Stream implements Model_Contracts_Reader
 	 */
 	protected function attachFile($eof = true) : bool
 	{
-		@fclose($this->fp);
+	    if ($this->fp)
+		    @fclose($this->fp);
 
 		if (($this->fp = @fopen($this->file, 'r')) === false)
 			return false;
