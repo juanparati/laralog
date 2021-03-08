@@ -159,6 +159,21 @@ If you are lazy and you don't want to build your Laralog version, you are welcom
 [Download last release](https://github.com/juanparati/laralog/releases/latest)
 
 
+## 12. Supervisord configuration
+
+Example of a Supervisord configuration file:
+
+    [program:laralog-worker]
+    process_name=%(program_name)s_%(process_num)02d
+    command=/home/admin/laralog/laralog.phar https://http-intake.logs.datadoghq.eu/v1/input/[KEY] --sender=datadog --hostname=production01 --index=laravel --smart --async --from-timezone=Europe/Copenhagen --input=/home/admin/laravel/storage/logs/laravel.log
+    autostart=true
+    autorestart=true
+    user=admin
+    numprocs=1
+    redirect_stderr=true
+    stdout_logfile=/home/admin/laralog/log/laralog.log
+
+
 ## Backers
 
 - [Matchbanker.no](https://matchbanker.no)
