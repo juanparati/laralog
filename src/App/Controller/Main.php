@@ -1,6 +1,6 @@
 <?php
 
-use Amp\Loop;
+use Revolt\EventLoop;
 
 
 /**
@@ -161,20 +161,18 @@ class Controller_Main extends Controller
 
         // Initialize event loop
 		// ---------------------
-		Loop::run(function ()
+        EventLoop::repeat(Params::get('read_freq') / 1000, function ()
 		{
-			Loop::onSignal(SIGINT, [$this, 'actionTerminateBySignal']);
-			Loop::onSignal(SIGHUP, [$this, 'actionTerminateBySignal']);
-
-			// "repeat" is used instead of "onReadable", because unfortunately not all
-			// PHP installations include the libevent extension.
-			Loop::repeat(Params::get('read_freq'), Closure::fromCallable([$this, 'readLog']));
+			$this->readLog();
 		});
 
+        EventLoop::onSignal(SIGINT, fn() => $this->actionTerminateBySignal());
+        EventLoop::onSignal(SIGHUP, fn() => $this->actionTerminateBySignal());
+
+        EventLoop::run();
 
 		// Finish app
-        Apprunner::terminate(Apprunner::EXIT_SUCCESS);
-
+        Apprunner::terminate();
     }
 
 
@@ -253,9 +251,8 @@ class Controller_Main extends Controller
 	{
 		if (!ignore_user_abort())
 		{
-			echo "Exiting...";
-
-			Loop::stop();
+			echo "Exiting...\n";
+            Apprunner::terminate(Apprunner::EXIT_HUP);
 		}
 	}
 

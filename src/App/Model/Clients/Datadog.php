@@ -1,6 +1,6 @@
 <?php
 
-use Amp\Artax\DefaultClient;
+use Amp\Http\Client\HttpClientBuilder;
 
 /**
  * Class Model_Clients_Datadog.
@@ -30,8 +30,7 @@ class Model_Clients_Datadog extends Model_Client
 
 		// Set limit to the batch size
 		$this->settings['batch_size'] = $this->settings['batch_size'] > static::MAX_BATCH_SIZE ? static::MAX_BATCH_SIZE : $this->settings['batch_size'];
-
-		$this->client = new DefaultClient();
+		$this->client = HttpClientBuilder::buildDefault();
 	}
 
 }

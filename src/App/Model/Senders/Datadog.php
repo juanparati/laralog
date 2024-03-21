@@ -1,8 +1,7 @@
 <?php
 
-
-use Amp\Artax\Client;
-use Amp\Artax\Request;
+use Amp\Http\Client\HttpClient;
+use Amp\Http\Client\Request;
 
 
 /**
@@ -16,7 +15,7 @@ class Model_Senders_Datadog implements Model_Contracts_Sender
     /**
      * Datadog client.
      *
-     * @var \Amp\Artax\DefaultClient
+     * @var HttpClient
      */
     protected $client;
 
@@ -62,20 +61,18 @@ class Model_Senders_Datadog implements Model_Contracts_Sender
     public function __construct($client, bool $async = false)
     {
         $this->client = $client->getClient();
-		$this->client->setOption(Client::OP_DISCARD_BODY, $async);
-
 		$this->client_settings = $client->getClientSettings();
-
-        $this->async  = $async;
+        $this->async = $async;
     }
 
 
-	/**
+    /**
      * Send log entry.
      *
      * @param string $index
      * @param array $body
      * @param string $type
+     * @throws \Amp\Http\Client\HttpException
      */
     public function send(string $index, array $body)
     {
@@ -83,16 +80,32 @@ class Model_Senders_Datadog implements Model_Contracts_Sender
 
 		if (count($this->batch[$index]) >= $this->client_settings['batch_size'])
 			$this->sendNow($index);
+    }
 
+    /**
+     * Perform the request.
+     *
+     * @param Request $request
+     * @return void
+     * @throws \Amp\Http\Client\HttpException
+     */
+    protected function performRequest(Request $request)
+    {
+        $response = $this->client->request($request);
+
+        if (Params::get('verbose') && !$response->isSuccessful()) {
+            echo 'Error on send log ' . $response->getStatus();
+        }
     }
 
 
-	/**
-	 * Send logs immediately.
-	 *
-	 * @param string $index
-	 * @return Generator
-	 */
+    /**
+     * Send logs immediately.
+     *
+     * @param string $index
+     * @return Generator
+     * @throws \Amp\Http\Client\HttpException
+     */
     protected function sendNow(string $index)
 	{
 		$query_params = http_build_query([
@@ -101,18 +114,18 @@ class Model_Senders_Datadog implements Model_Contracts_Sender
 			'hostname' => $this->batch[$index][0]['hostname']
 		]);
 
-		$request = (new Request($this->client_settings['hosts'][0] . '?' . $query_params, 'POST'))
-			->withHeader('Content-Type', 'application/json')
-			->withBody(json_encode($this->batch[$index]));
+		$request = new Request(
+            $this->client_settings['hosts'][0] . '?' . $query_params,
+            'POST',
+            json_encode($this->batch[$index])
+        );
+        $request->setHeader('Content-Type', 'application/json');
 
-		$this->client->request($request)->onResolve(function ($error, $response) {
-			if ($error && Params::get('verbose'))
-			{
-				echo 'Error on send log' . PHP_EOL;
-				var_dump($error);
-			}
-		});
-
+        if ($this->async) {
+            Amp\async(fn() => $this->performRequest($request));
+        } else {
+            $this->performRequest($request);
+        }
 
 		$this->batch[$index] = [];
 	}

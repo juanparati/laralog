@@ -11,9 +11,8 @@ class Model_Senders_ElasticSearch implements Model_Contracts_Sender
     /**
      * Elastic Search client.
      *
-     * @var \Elasticsearch\Client
      */
-    protected $client;
+    protected Elasticsearch\Client $client;
 
 
     /**
@@ -21,7 +20,7 @@ class Model_Senders_ElasticSearch implements Model_Contracts_Sender
      *
      * @var array
      */
-    protected $last_entry = [];
+    protected array $last_entry = [];
 
 
     /**
@@ -29,7 +28,7 @@ class Model_Senders_ElasticSearch implements Model_Contracts_Sender
      *
      * @var bool $future_mode
      */
-    protected $future_mode = false;
+    protected bool $future_mode = false;
 
 
     /**
