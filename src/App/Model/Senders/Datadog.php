@@ -103,7 +103,6 @@ class Model_Senders_Datadog implements Model_Contracts_Sender
      * Send logs immediately.
      *
      * @param string $index
-     * @return Generator
      * @throws \Amp\Http\Client\HttpException
      */
     protected function sendNow(string $index)
