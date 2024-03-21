@@ -158,6 +158,15 @@ If you are lazy and you don't want to build your Laralog version, you are welcom
 
 [Download last release](https://github.com/juanparati/laralog/releases/latest)
 
+### Signed binaries
+
+From v4 onwards the signed binaries are also available. The signature consist in a public key that should be saved in the same path where the PHAR file is located.
+The signature is calculated in the whole content of the phar file and avoid to tamper the content.
+
+Note that if you rename the PHAR file like for example from something like "laralog_4.0_unsigned.phar" to "laralog.phar" the public key should be also be renamed from "laralog_4.0_unsighed.phar.pubkey" to "laralog.phar.pubkey".
+
+An unsigned version of the PHAR file is also distributed however their usage is discouraged.
+
 
 ## 12. Supervisord configuration
 
