@@ -297,3 +297,5 @@ Stack trace:
 [2016-04-16 17:30:54] local.CRITICAL: this is a critical message
 [2016-04-16 17:31:19] local.ALERT: this is an alert message
 [2016-04-16 17:31:39] local.EMERGENCY: this is an emergency message
+[2016-04-16 17:31:41] local.INFO: Example multiple {"foo": "Test", "bar": "{{ Moustache }}"} {"Context":"test"}
+
