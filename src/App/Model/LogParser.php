@@ -56,13 +56,20 @@ class Model_LogParser
         if (preg_match(static::LOG_EXPR, $entry, $matches))
         {
             // Extract JSON data
-            if (preg_match('/ ({.*})$/', trim($matches[4]), $data))
-            {
-                $matches[4] = str_replace($data[1], '', $matches[4]);
-                $data       = $data[1];
+            preg_match_all(
+                '/\{(?:[^{}]|(?R))*\}/m',
+                trim($matches[4]),
+                $data,
+            );
+
+            $structs = [];
+
+            if (count($data[0])) {
+                foreach ($data[0] as $d) {
+                    $structs[] = trim($d);
+                    $matches[4] = str_replace($d, '', $matches[4]);
+                }
             }
-            else
-                $data = null;
 
             $timestamp = Carbon::createFromFormat(static::DATETIME_FORMAT, $matches[1], $current_timezone);
 
@@ -94,23 +101,34 @@ class Model_LogParser
 				'environment'   => $matches[2],
 				'level'         => $matches[3],
 				'message'       => trim($matches[4]),
-				'data'          => empty($data) ? null : trim($data)
+				'data'          => $structs ? null : json_encode($structs),
 			];
+
+
+            $fnSafeDecode = function($str) {
+                $des = json_decode($str, true);
+                return JSON_ERROR_NONE === json_last_error() ? $des : null;
+            };
 
 
             /**
              * Deserialize data and add it to params.
              */
-            if (!empty(trim($log['data'])) && $smart_serialization)
+            if (!empty($structs) && $smart_serialization)
             {
-                $params = json_decode($data, true);
+                if (count($structs) === 1) {
+                    $log['params'] = $fnSafeDecode($structs[0]);
+                } else {
+                    $param = [];
+                    foreach ($structs as $struct) {
+                        $param[] = $fnSafeDecode($struct);
+                    }
 
-                if (JSON_ERROR_NONE === json_last_error())
-                    $log['params'] = $params;
+                    $log['params'] = array_filter($param);
+                }
             }
 
             // Avoid repeated events
-			// // @see: http://thinkofdev.com/equal-identical-and-array-comparison-in-php/
             return static::$last_log = ($log == static::$last_log) ? false : $log;
 
         }
