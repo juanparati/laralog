@@ -8,7 +8,7 @@ class Model_LogParser
 {
 
     /**
-     * Regular expression used in order to parse logs.
+     * Regular expression used to parse logs.
      *
      * (Group 1) - Timestamp
      * (Group 2) - Environment
