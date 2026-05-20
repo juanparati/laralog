@@ -121,7 +121,7 @@ class Model_Senders_Datadog implements Model_Contracts_Sender
         $request->setHeader('Content-Type', 'application/json');
 
         if ($this->async) {
-            Amp\async(fn() => $this->performRequest($request));
+            Amp\async(fn() => $this->performRequest($request))->ignore();
         } else {
             $this->performRequest($request);
         }
