@@ -4,6 +4,9 @@
          /____/\_,_/_/  \_,_/____/\___/\_, /
                                       /___/ 
 
+> [!IMPORTANT]
+> LaraLog is begin replaced by [LogSender](https://github.com/juanparati/logsender)
+
 ## 1. What is it?
 
 A Laravel log sender agent.
