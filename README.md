@@ -5,7 +5,7 @@
                                       /___/ 
 
 > [!IMPORTANT]
-> LaraLog is begin replaced by [LogSender](https://github.com/juanparati/logsender)
+> LaraLog is being replaced by [LogSender](https://github.com/juanparati/logsender)
 
 ## 1. What is it?
 
